@@ -13,7 +13,7 @@ export async function getServerSideProps() {
 <ul> 
   bonjour
   {posts.map(post => (
-  <li key={post.Time}>{post.Time} {post.ETHBTC} {post.ETHUSD}</li>
+  <p> {post.ETHBTC} {post.ETHUSD}</p>
    ))}
  </ul>
 	;

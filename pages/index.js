@@ -1,8 +1,27 @@
 import Head from 'next/head'
-import Product from '../components/Product'
+import Price from '../components/Price'
 import prisma from '../lib/prisma'
 
-export default function Home({ products }) {
+const load = async () => {
+  try {
+    const price = await prisma.priceETH.findMany({
+
+    })
+
+
+  } catch (e) {
+    console.error(e)
+    process.exit(1)
+  } finally {
+    await prisma.$disconnect()
+  }
+  return price
+}
+
+const price =load()
+
+
+export default function Home({ price }) {
   return (
     <div>
       <Head>
@@ -17,9 +36,6 @@ export default function Home({ products }) {
           🔥 Shop from the hottest items in the world 🔥
         </p>
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
-          {products.map((product) => (
-            <Product product={product} key={product.id} />
-          ))}
         </div>
       </main>
 
@@ -28,19 +44,4 @@ export default function Home({ products }) {
   )
 }
 
-export async function getStaticProps(context) {
-  const data = await prisma.product.findMany({
-    include: {
-      category: true,
-    },
-  })
 
-  //convert decimal value to string to pass through as json
-  const products = data.map((product) => ({
-    ...product,
-    price: product.price.toString(),
-  }))
-  return {
-    props: { products },
-  }
-}
